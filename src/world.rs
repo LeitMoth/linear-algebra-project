@@ -49,8 +49,12 @@ impl World {
                 && y >= self.box_y
                 && y < self.box_y + BOX_SIZE;
 
-            let rgba = if inside_the_box {
-                [0x5e, 0x48, 0xe8, 0xff]
+            let rgba: [u8; 4] = if inside_the_box {
+                let red: u8 = 255;
+                let green: u8 = 255;
+                let blue: u8 = 255;
+                let alpha: u8 = 255;
+                [red, green, blue, alpha]
             } else {
                 [0x48, 0xb2, 0xe8, 0xff]
             };
