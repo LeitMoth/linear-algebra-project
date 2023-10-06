@@ -2,6 +2,7 @@
 #![forbid(unsafe_code)]
 
 mod world;
+mod lines;
 
 use error_iter::ErrorIter as _;
 use log::error;

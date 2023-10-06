@@ -1,3 +1,5 @@
+use crate::lines;
+
 /// Representation of the application state. In this example, a box will bounce around the screen.
 pub struct World {
     box_x: i16,
@@ -61,5 +63,12 @@ impl World {
 
             pixel.copy_from_slice(&rgba);
         }
+
+        // Test line draw algorithm
+        lines::plot_line((200,60).into(), (100,200).into(), |v| {
+            let pix = 4 * (v.y * self.width as i32 + v.x);
+            let pix = pix as usize;
+            frame[pix..pix+4].copy_from_slice(&[0xFF, 0x80, 0x10, 0xFF]);
+        });
     }
 }
