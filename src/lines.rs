@@ -3,7 +3,7 @@
 
 use glam::IVec2;
 
-pub fn plot_line(mut p1: IVec2, p2: IVec2, mut plot: impl FnMut(IVec2) -> ()) {
+pub fn plot_line(mut p1: IVec2, p2: IVec2, mut plot: impl FnMut(IVec2)) {
     let dx = i32::abs(p2.x - p1.x);
     let dy = -i32::abs(p2.y - p1.y);
     let sx = if p1.x < p2.x { 1 } else { -1 };
