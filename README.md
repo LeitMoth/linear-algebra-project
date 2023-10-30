@@ -16,4 +16,5 @@ used Visual Studio Code.
 
 ## Authors
 Colin Phillips - Hendrix College
+
 Harry Lance - Hendrix College
