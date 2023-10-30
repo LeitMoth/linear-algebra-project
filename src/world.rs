@@ -1,13 +1,13 @@
 use std::{
     f32::consts::{PI, TAU},
-    time::{SystemTime, Duration},
+    time::{SystemTime, Duration}, path::Path,
 };
 
 use glam::{IVec2, Mat4, Vec3, Vec2};
 use winit::event::VirtualKeyCode;
 use winit_input_helper::WinitInputHelper;
 
-use crate::{lines, mesh};
+use crate::{lines, mesh, wavefront_obj::load_obj};
 
 /// Representation of the application state.
 pub struct World {
@@ -25,6 +25,8 @@ type Triangle = [Vec3; 3];
 impl World {
     // adds cube // triangles are not modified after this point 
     pub fn new(width: u32, height: u32) -> Self {
+        dbg!(load_obj(Path::new("./res/cube.obj")));
+
         let mut triangles = vec![];
 
         triangles.extend(mesh::cube());

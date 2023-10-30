@@ -4,6 +4,7 @@
 mod lines;
 mod mesh;
 mod world;
+mod wavefront_obj;
 
 use error_iter::ErrorIter as _;
 use log::error;
