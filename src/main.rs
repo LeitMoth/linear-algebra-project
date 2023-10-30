@@ -68,7 +68,7 @@ fn main() -> Result<(), Error> {
             }
 
             // Update internal state and request a redraw
-            world.update();
+            world.update(&input);
             window.request_redraw();
         }
     });
