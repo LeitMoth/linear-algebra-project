@@ -3,8 +3,9 @@
 
 mod lines;
 mod mesh;
-mod world;
+mod model;
 mod wavefront_obj;
+mod world;
 
 use error_iter::ErrorIter as _;
 use log::error;
