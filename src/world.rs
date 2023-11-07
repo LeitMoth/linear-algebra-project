@@ -54,7 +54,7 @@ impl World {
         let x = f32::powi(f32::sin(slider(25.0) * TAU), 3) * 6.0;
 
         for model in &mut self.models {
-            // rotation first (cube starts at center) and then translation // at z = 4
+            // rotation first (cube starts at center) and then translation // from z = 5 to z = 11 back to z = 5 and then to z = -1 
             model.transform = Mat4::from_translation(Vec3::new(x, 0.0, 4.0))
                 * Mat4::from_rotation_x(a)
                 * Mat4::from_rotation_y(a + 2.0);
@@ -98,8 +98,10 @@ impl World {
             let mat = screenspace * proj * view * model.transform;
 
             for ind in &model.indices {
-                let triangle = ind.map(|i| model.verts[i]).map(|v| mat.project_point3(v));
+                // find each index and project each vertex
+                let triangle = ind.map(|i| model.verts[i]).map(|v| mat.project_point3(v)); 
 
+                //clipping near and far plane 
                 if triangle.iter().any(|t| t.z < 0.0 || t.z > 1.0) {
                     continue;
                 }
@@ -124,10 +126,12 @@ impl World {
                         return;
                     }
 
+                    //average z value of the triangles
                     let depth = (triangle[0].z + triangle[1].z + triangle[2].z) / 3.0;
 
                     let depth_8bit = (depth.clamp(0.0,1.0) * 255.0) as u8;
 
+                    // checks if we are behind
                     if depth_8bit > frame[pix + 3] { return; }
 
                     let inv_depth = depth;
