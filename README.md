@@ -5,14 +5,10 @@ triangles in the orientation of a cube in 3 dimensional space and transform and 
 side-to-side across the screen. Our project involves extensive use of matrix multiplication and affine transformations to serve as an application of the 
 various linear algebra concepts we have learned inside and outside of class.
 
-## Requirements 
-
-
-
 ## Installation
 
-We recommend installing the Rust programming language using rustup; this will install both Rust and Cargo (the Rust package manager). To run our software, we 
-used Visual Studio Code. 
+We recommend installing the Rust programming language using rustup; this will install both Rust and Cargo (the Rust package manager).For nstallation of Rust on macOS, Linux, or other Unix-like OS, please visit https://www.rust-lang.org/tools/install; for Windows, please visit https://forge.rust-lang.org/infra/other-installation-methods.html. To run our software, we 
+used Visual Studio Code (link to download: https://code.visualstudio.com). We further recommend that you follow the installation directions listed on the related websites to install the required software. 
 
 ## Authors
 Colin Phillips - Hendrix College
