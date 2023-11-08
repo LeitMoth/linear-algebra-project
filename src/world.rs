@@ -54,10 +54,10 @@ impl World {
         let x = f32::powi(f32::sin(slider(25.0) * TAU), 3) * 6.0;
 
         for model in &mut self.models {
-            // rotation first (cube starts at center) and then translation // from z = 5 to z = 11 back to z = 5 and then to z = -1 
-            model.transform = Mat4::from_translation(Vec3::new(x, 0.0, 4.0))
-                * Mat4::from_rotation_x(a)
-                * Mat4::from_rotation_y(a + 2.0);
+            // rotation first (cube starts at center) and then translation // at z = 4
+            // model.transform = Mat4::from_translation(Vec3::new(x, 0.0, 4.0))
+            //     * Mat4::from_rotation_x(a)
+            //     * Mat4::from_rotation_y(a + 2.0);
 
             model.transform = Mat4::from_translation(Vec3::new(0.0, 0.0, 5.0 + x))
                 * Mat4::from_rotation_y(a);
