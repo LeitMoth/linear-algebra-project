@@ -6,8 +6,10 @@ mod mesh;
 mod model;
 mod wavefront_obj;
 mod world;
+mod gui;
 
 use error_iter::ErrorIter as _;
+use gui::Framework;
 use log::error;
 use pixels::{Error, Pixels, SurfaceTexture};
 use winit::dpi::LogicalSize;
@@ -34,12 +36,24 @@ fn main() -> Result<(), Error> {
             .unwrap()
     };
 
-    let mut pixels = {
-        let window_size = window.inner_size();
-        let surface_texture = SurfaceTexture::new(window_size.width, window_size.height, &window);
-        Pixels::new(WIDTH, HEIGHT, surface_texture)?
-    };
     let mut world = World::new(WIDTH, HEIGHT);
+
+    let (mut pixels, mut framework) = {
+        let window_size = window.inner_size();
+        let scale_factor = window.scale_factor() as f32;
+        let surface_texture = SurfaceTexture::new(window_size.width, window_size.height, &window);
+        let pixels = Pixels::new(WIDTH, HEIGHT, surface_texture)?;
+        let framework = Framework::new(
+            &event_loop,
+            window_size.width,
+            window_size.height,
+            scale_factor,
+            &pixels,
+            world.models.clone(),
+        );
+
+        (pixels, framework)
+    };
 
     event_loop.run(move |event, _, control_flow| {
         // Draw the current frame
@@ -60,6 +74,11 @@ fn main() -> Result<(), Error> {
                 return;
             }
 
+            // Update the scale factor
+            if let Some(scale_factor) = input.scale_factor() {
+                framework.scale_factor(scale_factor);
+            }
+
             // Resize the window
             if let Some(size) = input.window_resized() {
                 if let Err(err) = pixels.resize_surface(size.width, size.height) {
@@ -67,11 +86,45 @@ fn main() -> Result<(), Error> {
                     *control_flow = ControlFlow::Exit;
                     return;
                 }
+                framework.resize(size.width, size.height);
             }
 
             // Update internal state and request a redraw
             world.update(&input);
             window.request_redraw();
+        }
+
+        match event {
+            Event::WindowEvent { event, .. } => {
+                // Update egui inputs
+                framework.handle_event(&event);
+            }
+            // Draw the current frame
+            Event::RedrawRequested(_) => {
+                // Draw the world
+                world.draw(pixels.frame_mut());
+
+                // Prepare egui
+                framework.prepare(&window);
+
+                // Render everything together
+                let render_result = pixels.render_with(|encoder, render_target, context| {
+                    // Render the world texture
+                    context.scaling_renderer.render(encoder, render_target);
+
+                    // Render egui
+                    framework.render(encoder, render_target, context);
+
+                    Ok(())
+                });
+
+                // Basic error handling
+                if let Err(err) = render_result {
+                    log_error("pixels.render", err);
+                    *control_flow = ControlFlow::Exit;
+                }
+            }
+            _ => (),
         }
     });
 }

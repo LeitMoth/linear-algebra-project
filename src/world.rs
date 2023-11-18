@@ -1,7 +1,7 @@
 use std::{
     f32::consts::TAU,
     path::Path,
-    time::{Duration, SystemTime},
+    time::{Duration, SystemTime}, sync::{Arc, Mutex},
 };
 
 use glam::{IVec2, Mat4, Vec3};
@@ -14,7 +14,7 @@ use crate::{lines, model::Model, wavefront_obj::load_obj};
 pub struct World {
     width: u32,
     height: u32,
-    models: Vec<Model>,
+    pub models: Arc<Mutex<Vec<Model>>>,
     start_time: SystemTime,
     processed_time: Duration,
     ticks: u128,
@@ -26,7 +26,7 @@ impl World {
         Self {
             width,
             height,
-            models: vec![load_obj(Path::new("./res/blender_monkey.obj"))],
+            models: Arc::new(Mutex::new(vec![load_obj(Path::new("./res/blender_monkey.obj"))])),
             start_time: SystemTime::now(),
             processed_time: Duration::from_secs(0),
             ticks: 0,
@@ -53,7 +53,8 @@ impl World {
         // moves back and forth from -6 to 6
         let x = f32::powi(f32::sin(slider(25.0) * TAU), 3) * 6.0;
 
-        for model in &mut self.models {
+        let mut models = self.models.lock().unwrap();
+        for model in &mut *models {
             // rotation first (cube starts at center) and then translation // at z = 4
             // model.transform = Mat4::from_translation(Vec3::new(x, 0.0, 4.0))
             //     * Mat4::from_rotation_x(a)
@@ -93,7 +94,9 @@ impl World {
             * Mat4::from_scale(Vec3::new(self.width as f32, -(self.height as f32), 1.0));
 
 
-        for model in &self.models {
+        let models = self.models.lock().unwrap();
+
+        for model in &*models {
             // puts model in space, moves camera to model, projects onto clipspace, transforms to screenspace
             let mat = screenspace * proj * view * model.transform;
 
