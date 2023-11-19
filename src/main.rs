@@ -56,16 +56,6 @@ fn main() -> Result<(), Error> {
     };
 
     event_loop.run(move |event, _, control_flow| {
-        // Draw the current frame
-        if let Event::RedrawRequested(_) = event {
-            world.draw(pixels.frame_mut());
-            if let Err(err) = pixels.render() {
-                log_error("pixels.render", err);
-                *control_flow = ControlFlow::Exit;
-                return;
-            }
-        }
-
         // Handle input events
         if input.update(&event) {
             // Close events
