@@ -14,6 +14,7 @@ use crate::{lines, model::Model, wavefront_obj::load_obj};
 pub struct World {
     width: u32,
     height: u32,
+    // This was not a great design move, but saved a good bit of time
     pub models: Arc<Mutex<Vec<Model>>>,
     start_time: SystemTime,
     processed_time: Duration,
@@ -71,7 +72,7 @@ impl World {
     pub fn draw(&self, frame: &mut [u8]) {
         // clear buffer with blue
         for pixel in frame.chunks_exact_mut(4) {
-            pixel.copy_from_slice(&[0x48, 0xb2, 0xe8, 0xff])
+            pixel.copy_from_slice(&[0x00, 0x69, 0x94, 0xff])
         }
 
         // setup matrix transforms
