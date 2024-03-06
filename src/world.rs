@@ -83,7 +83,7 @@ impl World {
         // will center the camera from any position/rotation
         let view = camera.inverse();
         // left handed perspective; positive z is away from the camera
-        let proj = Mat4::perspective_lh(70_f32.to_radians(), (self.width as f32) / (self.height as f32), 2.0, 10.0);
+        let proj = Mat4::perspective_lh(70_f32.to_radians(), (self.width as f32) / (self.height as f32), 0.1, 10.0);
 
         let screenspace = Mat4::IDENTITY
             * Mat4::from_translation(Vec3::new(

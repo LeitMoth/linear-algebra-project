@@ -1,12 +1,12 @@
 #![deny(clippy::all)]
 #![forbid(unsafe_code)]
 
+mod gui;
 mod lines;
 mod mesh;
 mod model;
 mod wavefront_obj;
 mod world;
-mod gui;
 
 use error_iter::ErrorIter as _;
 use gui::Framework;
@@ -19,8 +19,8 @@ use winit::window::WindowBuilder;
 use winit_input_helper::WinitInputHelper;
 use world::World;
 
-const WIDTH: u32 = 320;
-const HEIGHT: u32 = 240;
+const WIDTH: u32 = 320 * 2;
+const HEIGHT: u32 = 240 * 2;
 
 fn main() -> Result<(), Error> {
     env_logger::init();
